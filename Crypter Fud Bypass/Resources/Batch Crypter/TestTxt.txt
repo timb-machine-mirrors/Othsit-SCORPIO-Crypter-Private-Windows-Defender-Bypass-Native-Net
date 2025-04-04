@@ -1,0 +1,11 @@
+{
+    "chinese": %chinese%,
+    "bloat": true,
+    "remove_blank_lines": true,
+    "super_obf": false,
+    "smartscreen_bypass": false,
+    "hidden": %hidden%,
+    "FUD": true,
+    "debug": %debug%,
+    "key": "%NONE%"
+}
