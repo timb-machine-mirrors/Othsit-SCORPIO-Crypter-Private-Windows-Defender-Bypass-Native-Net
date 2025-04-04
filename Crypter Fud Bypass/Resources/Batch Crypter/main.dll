@@ -1,0 +1,48 @@
+import os #line:1:import os
+import sys #line:2:import sys
+import time #line:3:import time
+from util .supporting .settings import all_ #line:5:from util.supporting.settings import all_
+from util .ui .ui import Ui ,UiLinux #line:7:from util.ui.ui import Ui, UiLinux
+from util .obfuscation .obfuscate import Obfuscator #line:8:from util.obfuscation.obfuscate import Obfuscator
+from util .auto_updating .updater import AutoUpdate #line:10:from util.auto_updating.updater import AutoUpdate
+from rich import print #line:12:from rich import print
+from rich .panel import Panel #line:13:from rich.panel import Panel
+from rich .align import Align #line:14:from rich.align import Align
+from rich .syntax import Syntax #line:15:from rich.syntax import Syntax
+from rich .traceback import install #line:16:from rich.traceback import install
+install ()#line:18:install()
+from argparse import ArgumentParser #line:20:from argparse import ArgumentParser
+__version__ ="2.1.1"#line:23:__version__ = "2.1.1"
+class Main :#line:26:class Main:
+    def main (OOO000OOO00OOOOOO ):#line:27:def main(self):
+        OOO00O0O0O00OOOO0 =all_ .super_obf #line:28:super_obf = all_.super_obf
+        if any ([args .file ]):#line:29:if any([args.file]):
+            Obfuscator (args .file ,double_click_check =False ,utf_16_bom =False )#line:33:Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
+            return #line:34:return
+        AutoUpdate (__version__ )#line:36:AutoUpdate(__version__)
+        if os .name =="nt":#line:39:if os.name == "nt":
+            OOO000OOO00OOOOOO .ui =Ui ()#line:40:self.ui = Ui()
+        else :#line:41:else:
+            OOO000OOO00OOOOOO .ui =UiLinux ()#line:42:self.ui = UiLinux()
+        OOO000OOO00OOOOOO .ui .main_ui ()#line:45:self.ui.main_ui()
+        Ui .pretty_print_settings ()#line:48:Ui.pretty_print_settings()
+        OOO000OOO00OOOOOO .file_location =OOO000OOO00OOOOOO .ui .get_user_file ()#line:51:self.file_location = self.ui.get_user_file()
+        with open (OOO000OOO00OOOOOO .file_location ,encoding ="utf8",errors ="ignore")as O0000OO0OOO0O000O :#line:54:with open(self.file_location, encoding="utf8", errors="ignore") as f:
+            OOOO000000O00OOO0 =Syntax (O0000OO0OOO0O000O .read (),"bat",line_numbers =True )#line:55:syntax = Syntax(f.read(), "bat", line_numbers=True)
+        print (Align .center (Panel .fit (OOOO000000O00OOO0 ,title ="Batch Content",border_style ="bold blue",padding =(1 ,2 ),subtitle =f"SomalifuscatorV{__version__}")))#line:56:print(Align.center(Panel.fit(syntax, title="Batch Content", border_style="bold blue", padding=(1, 2), subtitle=f"SomalifuscatorV{__version__}")))
+        if OOO00O0O0O00OOOO0 :#line:57:if super_obf:
+            print ("This is only available in the paid version of Somalifuscator.")#line:58:print("This is only available in the paid version of Somalifuscator.")
+            input ("Press any key to exit...")#line:59:input("Press any key to exit...")
+        else :#line:60:else:
+            Obfuscator (OOO000OOO00OOOOOO .file_location )#line:61:Obfuscator(self.file_location)
+            input ("Press any key to exit...")#line:62:input("Press any key to exit...")
+        return #line:64:return
+if __name__ =="__main__":#line:67:if __name__ == "__main__":
+    parse =ArgumentParser ()#line:68:parse = ArgumentParser()
+    parse .add_argument ("-f","--file",help ="File to obfuscate",type =str )#line:69:parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
+    args =parse .parse_args ()#line:70:args = parse.parse_args()
+    current_time =time .time ()#line:71:current_time = time.time()
+    Main ().main ()#line:72:Main().main()
+    finish_time =time .time ()#line:73:finish_time = time.time()
+    print (f"It only took {finish_time - current_time} to finish!")#line:74:print(f"It only took {finish_time - current_time} to finish!")
+    sys .exit (0 )#line:75:sys.exit(0)
